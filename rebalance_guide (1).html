@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ReBALANCE — 紹介ガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=BIZ+UDPGothic:wght@400;700&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --ink:#111;--paper:#faf9f6;--cream:#f0ede6;
+  --gold:#9a7c3a;--gold-l:#f5eed8;
+  --red:#b83030;--red-l:#fdf0ef;
+  --blue:#1a4e8a;--blue-l:#eef3fb;
+  --dim:#777;--border:#ddd;
+  --dur:.38s;
+}
+html,body{height:100%;overflow:hidden;background:var(--paper);
+  font-family:'BIZ UDPGothic',sans-serif;color:var(--ink);}
+
+/* ── HEADER ── */
+#hd{position:fixed;top:0;left:0;right:0;z-index:200;
+  height:50px;background:var(--ink);
+  display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+.hd-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+  font-weight:400;color:#fff;letter-spacing:.2em;}
+.hd-logo em{font-style:italic;font-weight:300;color:#c8a96e;letter-spacing:.08em;}
+.hd-r{display:flex;gap:8px;align-items:center;}
+.dir-tog{display:flex;border:1px solid rgba(255,255,255,.2);border-radius:5px;overflow:hidden;}
+.dir-b{padding:5px 10px;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.4);
+  background:transparent;border:none;cursor:pointer;transition:.15s;}
+.dir-b.on{background:#fff;color:var(--ink);}
+.dl-b{padding:6px 12px;background:var(--gold);color:#fff;font-size:.68rem;
+  font-weight:700;border:none;border-radius:5px;cursor:pointer;}
+
+/* ── PROGRESS ── */
+#pg-w{position:fixed;top:50px;left:0;right:0;height:3px;background:#333;z-index:200;}
+#pg{height:100%;background:var(--gold);transition:width var(--dur) ease;}
+#cnt{position:fixed;top:56px;right:14px;font-size:.65rem;font-weight:700;
+  color:var(--dim);z-index:150;background:rgba(250,249,246,.9);padding:2px 6px;border-radius:3px;}
+
+/* ── SLIDER ── */
+#wrap{position:fixed;top:53px;left:0;right:0;bottom:52px;overflow:hidden;}
+#slider{display:flex;height:100%;transition:transform var(--dur) cubic-bezier(.4,0,.2,1);}
+#slider.v{flex-direction:column;width:100%;height:auto;}
+.slide{flex-shrink:0;height:100%;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;display:flex;flex-direction:column;}
+.v .slide{width:100%!important;min-height:calc(100dvh - 105px);height:auto;}
+
+/* ── BOTTOM NAV ── */
+#nav{position:fixed;bottom:0;left:0;right:0;height:52px;
+  background:var(--paper);border-top:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:200;}
+.nb{width:44px;height:42px;border:1.5px solid var(--border);border-radius:8px;
+  background:var(--paper);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.15s;touch-action:manipulation;}
+.nb:active{background:var(--cream);transform:scale(.94);}
+.nb.off{opacity:.2;pointer-events:none;}
+.nb svg{width:18px;height:18px;}
+#dots-w{display:flex;gap:6px;align-items:center;flex:1;justify-content:center;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:.2s;}
+.dot.on{background:var(--ink);transform:scale(1.35);}
+
+/* ════ SLIDE STYLES ════ */
+
+/* COVER */
+.s-cover{background:var(--ink);justify-content:center;align-items:center;
+  text-align:center;padding:36px 24px;position:relative;overflow:hidden;}
+.cover-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(200,169,110,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,169,110,.04) 1px,transparent 1px);
+  background-size:36px 36px;pointer-events:none;}
+.cover-corner{position:absolute;width:50px;height:50px;
+  border-color:var(--gold);border-style:solid;opacity:.4;}
+.tl{top:62px;left:18px;border-width:1px 0 0 1px;}
+.br{bottom:62px;right:18px;border-width:0 1px 1px 0;}
+.cover-eyebrow{font-family:'DM Sans',sans-serif;font-size:.6rem;font-weight:700;
+  letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+.cover-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,3rem);
+  font-weight:300;color:#fff;line-height:1.2;letter-spacing:.1em;}
+.cover-h strong{color:var(--gold);font-weight:600;display:block;font-size:clamp(2.2rem,9vw,3.8rem);}
+.cover-line{width:36px;height:1px;background:var(--gold);margin:18px auto;}
+.cover-sub{font-size:.82rem;color:rgba(255,255,255,.45);line-height:1.75;font-weight:300;}
+.swipe-hint{margin-top:24px;font-size:.72rem;color:rgba(255,255,255,.3);
+  animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:.9}}
+
+/* BODY */
+.s-body{padding:14px 18px 20px;display:flex;flex-direction:column;gap:14px;flex:1;}
+.slide-tag{display:inline-flex;align-items:center;gap:6px;}
+.tag{display:inline-block;padding:3px 10px;border-radius:3px;
+  font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.tag-ink{background:var(--ink);color:#fff;}
+.tag-gold{background:var(--gold);color:#fff;}
+.tag-red{background:var(--red);color:#fff;}
+.tag-blue{background:var(--blue);color:#fff;}
+.tag-line{font-size:.7rem;color:var(--dim);font-weight:500;}
+
+.slide-h{font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,6.5vw,2.4rem);font-weight:400;line-height:1.2;
+  letter-spacing:.04em;color:var(--ink);}
+.slide-h em{color:var(--gold);font-style:italic;}
+.slide-h .red{color:var(--red);}
+.slide-h .blue{color:var(--blue);}
+/* 数字はBIZ UDPGothicで表示（Cormorantのオールドスタイル数字を回避） */
+.slide-h .num{font-family:'BIZ UDPGothic',sans-serif;font-weight:700;
+  font-size:clamp(1.6rem,6.5vw,2.4rem);vertical-align:baseline;}
+
+.lead{font-size:clamp(.82rem,3vw,.95rem);color:#444;line-height:1.8;font-weight:300;}
+
+/* FEATURE LIST */
+.feat-list{display:flex;flex-direction:column;gap:8px;}
+.feat{display:flex;gap:10px;padding:11px 14px;
+  background:var(--cream);border-radius:8px;border-left:3px solid var(--gold);}
+.feat-num{font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:700;
+  color:var(--gold);flex-shrink:0;margin-top:2px;width:16px;}
+.feat-txt{font-size:clamp(.78rem,2.9vw,.9rem);color:var(--ink);line-height:1.6;}
+.feat-txt strong{color:var(--gold);}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.col-box{padding:14px 12px;border-radius:10px;border:2px solid;text-align:center;}
+.col-box.red-box{background:var(--red-l);border-color:var(--red);}
+.col-box.blue-box{background:var(--blue-l);border-color:var(--blue);}
+.col-tag{font-size:.6rem;font-weight:700;letter-spacing:.1em;margin-bottom:5px;}
+.red-box .col-tag{color:var(--red);}
+.blue-box .col-tag{color:var(--blue);}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;line-height:1.2;margin-bottom:6px;}
+.red-box .col-title{color:var(--red);}
+.blue-box .col-title{color:var(--blue);}
+.col-feat{font-size:.68rem;color:#444;line-height:1.6;}
+
+/* Q&A */
+.qa-list{display:flex;flex-direction:column;gap:7px;}
+.qa-row{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:var(--cream);border-radius:8px;}
+.qa-q{font-size:clamp(.75rem,2.8vw,.85rem);color:var(--ink);flex:1;line-height:1.5;}
+.qa-ans{display:flex;gap:6px;flex-shrink:0;margin-left:10px;}
+.qa-y{padding:3px 10px;border-radius:3px;font-size:.65rem;font-weight:700;
+  background:var(--red);color:#fff;}
+.qa-b{padding:3px 10px;border-radius:3px;font-size:.65rem;font-weight:700;
+  background:var(--blue);color:#fff;}
+.qa-n{padding:3px 10px;border-radius:3px;font-size:.65rem;font-weight:700;
+  background:var(--border);color:var(--dim);}
+
+/* RESULT BOX */
+.result-split{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px;}
+.rs-box{padding:12px 10px;border-radius:10px;text-align:center;}
+.rs-box.red{background:var(--red-l);border:2px solid var(--red);}
+.rs-box.blue{background:var(--blue-l);border:2px solid var(--blue);}
+.rs-label{font-size:.58rem;font-weight:700;letter-spacing:.1em;margin-bottom:4px;}
+.red .rs-label{color:var(--red);}
+.blue .rs-label{color:var(--blue);}
+.rs-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;line-height:1.2;margin-bottom:5px;}
+.red .rs-title{color:var(--red);}
+.blue .rs-title{color:var(--blue);}
+.rs-set{font-size:.62rem;color:#555;line-height:1.5;}
+.rs-note{font-size:.6rem;color:var(--dim);margin-top:4px;}
+
+/* PRODUCT CARD */
+.prod-list{display:flex;flex-direction:column;gap:8px;}
+.prod-card{display:flex;gap:10px;padding:10px 12px;
+  background:var(--cream);border-radius:10px;border-left:3px solid var(--gold);}
+.prod-name-wrap{flex-shrink:0;width:80px;}
+.prod-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;
+  color:var(--gold);line-height:1.1;margin-bottom:2px;}
+.prod-size{font-size:.58rem;color:var(--dim);}
+.prod-info{flex:1;min-width:0;}
+.prod-comp{font-size:.68rem;color:var(--ink);line-height:1.55;margin-bottom:3px;}
+.prod-spec{font-family:'DM Sans',sans-serif;font-size:.62rem;color:var(--dim);
+  letter-spacing:.03em;margin-bottom:3px;}
+.prod-price{font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:700;color:var(--gold);}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:2px 0;}
+
+/* INFO STRIP */
+.info-strip{display:flex;gap:10px;padding:11px 14px;
+  background:var(--gold-l);border-radius:8px;border:1px solid rgba(154,124,58,.25);}
+.info-icon{font-size:1.1rem;flex-shrink:0;}
+.info-txt{font-size:clamp(.75rem,2.8vw,.85rem);color:#444;line-height:1.65;}
+.info-txt strong{color:var(--gold);}
+
+/* END */
+.s-end{background:var(--ink);justify-content:center;align-items:center;
+  text-align:center;padding:36px 24px;position:relative;overflow:hidden;}
+.end-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,6vw,2.4rem);
+  font-weight:300;color:#fff;line-height:1.25;letter-spacing:.08em;margin-bottom:12px;}
+.end-h em{color:var(--gold);font-style:italic;}
+.end-sub{font-size:.85rem;color:rgba(255,255,255,.45);line-height:1.8;}
+.end-line{width:36px;height:1px;background:var(--gold);margin:16px auto;}
+.restart{margin-top:20px;display:inline-block;border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.5);padding:9px 20px;border-radius:6px;
+  font-size:.75rem;font-weight:600;cursor:pointer;}
+
+/* STEP ROWS */
+.step-rows{display:flex;flex-direction:column;gap:7px;}
+.step-row{display:flex;gap:11px;padding:11px 13px;
+  background:var(--cream);border-radius:9px;}
+.step-row.red-l{border-left:3px solid var(--red);}
+.step-row.blue-l{border-left:3px solid var(--blue);}
+.step-row.gold-l{border-left:3px solid var(--gold);}
+.sn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0;color:#fff;}
+.sn-r{background:var(--red);}
+.sn-b{background:var(--blue);}
+.sn-g{background:var(--gold);}
+.si{flex:1;}
+.si-t{font-size:clamp(.82rem,3.2vw,.92rem);font-weight:700;margin-bottom:2px;}
+.si-n{font-size:clamp(.7rem,2.6vw,.78rem);color:var(--dim);line-height:1.55;}
+</style>
+</head>
+<body>
+
+<div id="hd">
+  <div class="hd-logo">ReBALANCE <em>digital</em></div>
+  <div class="hd-r">
+    <div class="dir-tog">
+      <button class="dir-b on" id="bh" onclick="setDir('h')">→</button>
+      <button class="dir-b" id="bv" onclick="setDir('v')">↓</button>
+    </div>
+    <button class="dl-b" onclick="dlHTML()">保存</button>
+  </div>
+</div>
+<div id="pg-w"><div id="pg"></div></div>
+<div id="cnt"></div>
+
+<div id="wrap"><div id="slider">
+
+<!-- 0: COVER -->
+<div class="slide s-cover">
+  <div class="cover-grid"></div>
+  <div class="cover-corner tl"></div>
+  <div class="cover-corner br"></div>
+  <div class="cover-eyebrow">Cosmetic Straight Treatment</div>
+  <div class="cover-h">
+    削る矯正から
+    <strong>整える矯正へ</strong>
+  </div>
+  <div class="cover-line"></div>
+  <div class="cover-sub">ReBALANCE & ReBUILD（再構築）<br>新しい縮毛矯正の考え方</div>
+  <div class="swipe-hint">スワイプして読む →</div>
+</div>
+
+<!-- 1: 3つの特徴 -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-gold">FEATURE</span><span class="tag-line">ReBALANCEの特徴</span></div>
+    <div class="slide-h">最新情報を<br><em>できる限り揃えた</em></div>
+    <div class="feat-list">
+      <div class="feat">
+        <div class="feat-num">①</div>
+        <div class="feat-txt"><strong>システアミンフリー</strong>とノンアンモニアチオ、チオグリセリンを採用</div>
+      </div>
+      <div class="feat">
+        <div class="feat-num">②</div>
+        <div class="feat-txt">ダメージ毛にも対応できるよう、<strong>微還元タイプの薬剤</strong>を揃えました</div>
+      </div>
+      <div class="feat">
+        <div class="feat-num">③</div>
+        <div class="feat-txt">クリームだけでなく、<strong>ジェルもラインナップ</strong></div>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-icon">💡</div>
+      <div class="info-txt"><strong>処理剤に頼らず、薬剤でコントロール。</strong><br>処理剤はほぼ使いません。薬剤のコントロールがメインです。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 2: 計算アプリ -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-ink">DIGITAL</span><span class="tag-line">ReBALANCE digital</span></div>
+    <div class="slide-h">薬剤選定を<br><em>もっと簡単に</em></div>
+    <div class="lead">ReBALANCE専用の計算アプリを使うことで、髪質に合わせたレシピがすぐに作れます。</div>
+    <div class="step-rows">
+      <div class="step-row gold-l">
+        <div class="sn sn-g">1</div>
+        <div class="si">
+          <div class="si-t">毛髪診断でHPスコアを算出</div>
+          <div class="si-n">ダメージレベルを数値化。勘に頼らない診断</div>
+        </div>
+      </div>
+      <div class="step-row gold-l">
+        <div class="sn sn-g">2</div>
+        <div class="si">
+          <div class="si-t">POWER DOWN / UP を選択</div>
+          <div class="si-n">お客様の髪質・希望に合わせて方針を決定</div>
+        </div>
+      </div>
+      <div class="step-row gold-l">
+        <div class="sn sn-g">3</div>
+        <div class="si">
+          <div class="si-t">レシピが自動で計算される</div>
+          <div class="si-n">薬剤の種類・量・混合比率がgで表示</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-icon">📱</div>
+      <div class="info-txt">QRコードを読み込むだけで使えます。<strong>インストール不要。</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3: 4つの質問 -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-ink">CHECK</span><span class="tag-line">あなたはどっち？</span></div>
+    <div class="slide-h"><span class="num">4</span>つの質問に<br><em>答えてみてください</em></div>
+    <div class="qa-list">
+      <div class="qa-row">
+        <div class="qa-q">強い薬剤を塗布量や時間差でコントロールするのが得意</div>
+        <div class="qa-ans"><span class="qa-y">Yes</span><span class="qa-b">No</span></div>
+      </div>
+      <div class="qa-row">
+        <div class="qa-q">薬剤をしっかり多めに塗らないと不安だ</div>
+        <div class="qa-ans"><span class="qa-n">Yes</span><span class="qa-n">No</span></div>
+      </div>
+      <div class="qa-row">
+        <div class="qa-q">放置時間はなるべく短くしたい</div>
+        <div class="qa-ans"><span class="qa-y">Yes</span><span class="qa-b">No</span></div>
+      </div>
+      <div class="qa-row">
+        <div class="qa-q">軟化テストで、ビヨーーンとなるのはイヤだ</div>
+        <div class="qa-ans"><span class="qa-b">Yes</span><span class="qa-y">No</span></div>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-icon">👇</div>
+      <div class="info-txt"><strong style="color:var(--red)">赤が2つ以上 → POWER DOWN</strong><br><strong style="color:var(--blue)">青が2つ以上 → POWER UP</strong><br>次のスライドで確認してください</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4: 2つの方式 -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-gold">METHOD</span><span class="tag-line">2つの方式</span></div>
+    <div class="slide-h">お好みで<br><em>選べる<span class="num">2</span>方式</em></div>
+    <div class="two-col">
+      <div class="col-box red-box">
+        <div class="col-tag">通常の軟化型</div>
+        <div class="col-title">POWER<br>DOWN</div>
+        <div class="col-feat">
+          ペタツルサラサラに<br><strong style="color:var(--red)">伸ばしたい</strong><br><br>
+          しっかり伸ばせる<br>時短・柔らかい質感<br><br>
+          <em>強めの薬剤</em>からコントロール
+        </div>
+      </div>
+      <div class="col-box blue-box">
+        <div class="col-tag">ダメージケア型</div>
+        <div class="col-title">POWER<br>UP</div>
+        <div class="col-feat">
+          伸ばすことも大事だけど<br><strong style="color:var(--blue)">ダメージを避けたい</strong><br><br>
+          ボリュームダウンしない<br>放置時間一律<br><br>
+          <em>弱めの薬剤</em>からコントロール
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5: サンプルセット -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-gold">SAMPLE</span><span class="tag-line">まずはお試しください</span></div>
+    <div class="slide-h">サンプルセットを<br><em>ご用意しています</em></div>
+    <div class="result-split">
+      <div class="rs-box red">
+        <div class="rs-label">POWER DOWN</div>
+        <div class="rs-title">サンプルセット D</div>
+        <div class="rs-set">
+          ReBALANCE<br>
+          ブラック<br>
+          ペールイエロー<br>
+          Care PRO サンプル
+        </div>
+        <div class="rs-note">※送料のみご負担ください</div>
+      </div>
+      <div class="rs-box blue">
+        <div class="rs-label">POWER UP</div>
+        <div class="rs-title">サンプルセット U</div>
+        <div class="rs-set">
+          ReBALANCE<br>
+          ブースター<br>
+          イエロー・ペールイエロー<br>
+          Care PRO サンプル
+        </div>
+        <div class="rs-note">※送料のみご負担ください</div>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-icon">📩</div>
+      <div class="info-txt">お問い合わせはLINEより<strong>【箱石】</strong>まで<br>お気軽にご連絡ください</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6: 商品ラインナップ -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-ink">LINEUP</span><span class="tag-line">商品ラインナップ</span></div>
+    <div class="slide-h"><span class="num">5</span>つの<em>薬剤</em>で<br>すべてに対応</div>
+    <div class="feat-list">
+      <div class="feat" style="border-color:#111;">
+        <div class="feat-num" style="color:#111;font-family:'DM Sans',sans-serif;font-size:.65rem;">B</div>
+        <div class="feat-txt"><strong>Booster</strong>　システアミンフリー体 / pH9.6 / 29% / 200ml</div>
+      </div>
+      <div class="feat" style="border-color:#c8a020;">
+        <div class="feat-num" style="color:#c8a020;font-family:'DM Sans',sans-serif;font-size:.65rem;">Y</div>
+        <div class="feat-txt"><strong>Yellow</strong>　TGA+チオグリセリン配合 / pH5.9 / 8‰ / 1000g</div>
+      </div>
+      <div class="feat" style="border-color:#8aaa60;">
+        <div class="feat-num" style="color:#8aaa60;font-family:'DM Sans',sans-serif;font-size:.65rem;">PY</div>
+        <div class="feat-txt"><strong>Pale Yellow</strong>　チオグリセリン+TGA / pH4.0 / 2‰ / 1000g</div>
+      </div>
+      <div class="feat" style="border-color:#e07030;">
+        <div class="feat-num" style="color:#e07030;font-family:'DM Sans',sans-serif;font-size:.65rem;">SH</div>
+        <div class="feat-txt"><strong>Rectus SH</strong>　TGA / pH9.3 / 10.8% / 400g（TIERS）</div>
+      </div>
+      <div class="feat" style="border-color:#e090b0;">
+        <div class="feat-num" style="color:#e090b0;font-family:'DM Sans',sans-serif;font-size:.62rem;">ぷ</div>
+        <div class="feat-txt"><strong>ぷるぷるH</strong>　TGA / pH8.0 / 7% / 400g（VERY VERY）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7: Booster / Yellow / Pale Yellow 詳細 -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-gold">DETAIL</span><span class="tag-line">薬剤詳細 1/2</span></div>
+    <div class="slide-h">主要<span class="num">3</span>剤の<br><em>詳細スペック</em></div>
+    <div class="prod-list">
+      <div class="prod-card">
+        <div class="prod-name-wrap">
+          <div class="prod-name">Booster</div>
+          <div class="prod-size">200ml</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-comp">システアミンフリー体<br>他にアルカリ剤を添加しない新しい還元剤</div>
+          <div class="prod-spec">pH 9.6 / 29% / システアミンHCLの塩酸を分離</div>
+          <div class="prod-price">¥6,000（税別）</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-name-wrap">
+          <div class="prod-name">Yellow</div>
+          <div class="prod-size">1000g</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-comp">チオグリコール酸アンモニウム + チオグリセリン配合<br>アルカリ剤フリーの微還元クリーム</div>
+          <div class="prod-spec">pH 5.9 / 8‰ / Boosterの希釈剤</div>
+          <div class="prod-price">¥7,000（税別）</div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-name-wrap">
+          <div class="prod-name">Pale Yellow</div>
+          <div class="prod-size">1000g</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-comp">チオグリセリン + チオグリコール酸アンモニウム配合<br>アルカリ剤フリーの微還元ジェル</div>
+          <div class="prod-spec">pH 4.0 / 2‰ / Boosterの希釈剤</div>
+          <div class="prod-price">¥7,000（税別）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8: Rectus SH / ぷるぷるH 詳細 -->
+<div class="slide">
+  <div class="s-body">
+    <div class="slide-tag"><span class="tag tag-gold">DETAIL</span><span class="tag-line">薬剤詳細 2/2</span></div>
+    <div class="slide-h">ベース剤<br><em>詳細スペック</em></div>
+    <div class="prod-list">
+      <div class="prod-card" style="border-left-color:#e07030;">
+        <div class="prod-name-wrap" style="width:72px;flex-shrink:0;">
+          <div class="prod-name" style="color:#e07030;">Rectus SH</div>
+          <div class="prod-size">400g<br>（TIERS）</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-comp" style="font-size:.54rem;">チオグリコール酸アンモニウム<br>医薬部外品 コールド2浴式縮毛矯正剤</div>
+          <div class="prod-spec" style="font-size:.5rem;">SH / pH9.3 / 10.8% / 400g<br>M / pH9.0 / 9% / 400g</div>
+          <div class="prod-price" style="font-size:.62rem;">¥1,200（税別）</div>
+        </div>
+      </div>
+      <div class="prod-card" style="border-left-color:#e090b0;">
+        <div class="prod-name-wrap" style="width:72px;flex-shrink:0;">
+          <div class="prod-name" style="color:#c06080;">ぷるぷるH</div>
+          <div class="prod-size">400g<br>（VERY VERY）</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-comp" style="font-size:.54rem;">H / チオグリコール酸アンモニウム<br>S / アセチルシステイン　医薬部外品</div>
+          <div class="prod-spec" style="font-size:.5rem;">H / pH8.0 / 7% / 400g<br>S / pH6.0 / 3% / 400g</div>
+          <div class="prod-price" style="font-size:.62rem;">¥2,500（税別）</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-icon" style="font-size:.9rem;">🔗</div>
+      <div class="info-txt" style="font-size:.6rem;">Rectus SH はTIERS、ぷるぷるH は VERY VERY との<strong>販売代理店契約</strong>により取り扱い</div>
+    </div>
+  </div>
+</div>
+
+<!-- 9: END -->
+<div class="slide s-end">
+  <div class="cover-grid"></div>
+  <div class="cover-corner tl"></div>
+  <div class="cover-corner br"></div>
+  <div class="end-h">
+    お客様の毛髪体力を<br>
+    <em>奪いすぎない矯正へ。</em>
+  </div>
+  <div class="end-line"></div>
+  <div class="end-sub">
+    ご導入・サンプルのご相談は<br>
+    LINEより【箱石】までお気軽に<br><br>
+    ReBALANCE digital<br>
+    計算アプリ・電子カルテも<br>あわせてご活用ください
+  </div>
+  <div class="restart" onclick="goTo(0)">← 最初から見る</div>
+</div>
+
+</div></div>
+
+<div id="nav">
+  <div class="nb" id="bp" onclick="go(-1)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </div>
+  <div id="dots-w"></div>
+  <div class="nb" id="bn" onclick="go(1)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+</div>
+
+<script>
+const N=10;let cur=0,isV=false,SW=0;
+const slider=document.getElementById('slider');
+const wrap=document.getElementById('wrap');
+const pg=document.getElementById('pg');
+const cnt=document.getElementById('cnt');
+const dotsEl=document.getElementById('dots-w');
+const bp=document.getElementById('bp');
+const bn=document.getElementById('bn');
+
+function setSizes(){
+  SW=wrap.offsetWidth;
+  if(!isV)document.querySelectorAll('.slide').forEach(s=>{s.style.width=SW+'px';s.style.minWidth=SW+'px';});
+}
+for(let i=0;i<N;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>goTo(i);dotsEl.appendChild(d);
+}
+function ui(){
+  pg.style.width=((cur/(N-1))*100)+'%';
+  cnt.textContent=(cur+1)+' / '+N;
+  dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  bp.classList.toggle('off',cur===0);bn.classList.toggle('off',cur===N-1);
+}
+function goTo(n){
+  cur=Math.max(0,Math.min(N-1,n));
+  slider.style.transform=isV?`translateY(-${cur*(100/N)}%)`:`translateX(-${cur*SW}px)`;ui();
+}
+function go(d){goTo(cur+d);}
+function setDir(d){
+  isV=(d==='v');
+  document.getElementById('bh').classList.toggle('on',!isV);
+  document.getElementById('bv').classList.toggle('on',isV);
+  setSizes();
+  if(isV){slider.classList.add('v');slider.style.height=(N*100)+'%';
+    document.querySelectorAll('.slide').forEach(s=>{s.style.width='';s.style.minWidth='';});}
+  else{slider.classList.remove('v');slider.style.height='';}
+  goTo(cur);
+}
+window.addEventListener('resize',()=>{setSizes();goTo(cur);});
+
+let sx=0,sy=0,drag=false;
+wrap.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;drag=true;},{passive:true});
+wrap.addEventListener('touchmove',e=>{
+  if(!drag||isV)return;
+  const dx=Math.abs(e.touches[0].clientX-sx),dy=Math.abs(e.touches[0].clientY-sy);
+  if(dx>dy&&dx>8)e.preventDefault();
+},{passive:false});
+wrap.addEventListener('touchend',e=>{
+  if(!drag)return;
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(isV){if(Math.abs(dy)>35&&Math.abs(dy)>Math.abs(dx))go(dy<0?1:-1);}
+  else{if(Math.abs(dx)>35&&Math.abs(dx)>Math.abs(dy))go(dx<0?1:-1);}
+  drag=false;
+},{passive:true});
+wrap.addEventListener('mousedown',e=>{sx=e.clientX;sy=e.clientY;drag=true;});
+wrap.addEventListener('mouseup',e=>{
+  if(!drag)return;
+  const dx=e.clientX-sx,dy=e.clientY-sy;
+  if(isV){if(Math.abs(dy)>40)go(dy<0?1:-1);}else{if(Math.abs(dx)>40)go(dx<0?1:-1);}
+  drag=false;
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+let wl=false;
+wrap.addEventListener('wheel',e=>{
+  if(wl)return;wl=true;go(e.deltaY>0||e.deltaX>0?1:-1);setTimeout(()=>wl=false,600);
+},{passive:true});
+function dlHTML(){
+  const b=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='rebalance_guide.html';a.click();
+}
+setSizes();ui();
+</script>
+</body>
+</html>
